@@ -1,0 +1,30 @@
+# Node modules
+node_modules/
+
+# Output JSON and generated data
+data/gmp.json
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.*
+
+# Playwright specific
+playwright-report/
+test-results/
+*.log
+
+# TypeScript
+dist/
+*.tsbuildinfo
+
+# VSCode
+.vscode/
+
+# macOS system files
+.DS_Store
