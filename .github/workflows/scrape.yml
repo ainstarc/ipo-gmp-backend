@@ -1,0 +1,62 @@
+name: Scrape GMP Data and Update Frontend
+
+on:
+  schedule:
+    - cron: "0 */3 * * *" # Every 3 hours
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Backend Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Dependencies and Playwright
+        run: |
+          npm install
+          npx playwright install --with-deps
+
+      - name: Run Scraper
+        run: |
+          npx tsx scrape.ts
+
+      - name: Clone Frontend Repo (ipo-gmp)
+        run: |
+          git clone https://github.com/ainstarc/ipo-gmp.git frontend
+
+      - name: Compare and Copy if Changed
+        id: compare
+        run: |
+          mkdir -p frontend/public/reports
+          if [ ! -f frontend/public/reports/gmp.json ]; then
+            echo "No existing file. Treating as first update."
+            cp data/gmp.json frontend/public/reports/gmp.json
+            echo "skip=false" >> $GITHUB_OUTPUT
+          else
+            diffResult=$(diff -q data/gmp.json frontend/public/reports/gmp.json || true)
+            if [ -z "$diffResult" ]; then
+              echo "No changes detected. Skipping commit."
+              echo "skip=true" >> $GITHUB_OUTPUT
+            else
+              echo "Changes found. Updating frontend repo..."
+              cp data/gmp.json frontend/public/reports/gmp.json
+              echo "skip=false" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+      - name: Commit & Push to Frontend
+        if: steps.compare.outputs.skip == 'false'
+        run: |
+          cd frontend
+          git config user.name "gmp-bot"
+          git config user.email "actions@github.com"
+          git add public/reports/gmp.json
+          git commit -m "🔄 Auto-update: latest GMP data"
+          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/ainstarc/ipo-gmp.git main
