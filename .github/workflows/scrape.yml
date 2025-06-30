@@ -2,14 +2,22 @@ name: Scrape GMP Data and Update Frontend
 
 on:
   schedule:
-    # Mon–Fri: 10:00 AM IST
+    # Mon–Fri hourly: 10:00–19:00 IST → 4:30–13:30 UTC
     - cron: "30 4 * * 1-5"
-    # Mon–Fri: 2:00 PM IST
+    - cron: "30 5 * * 1-5"
+    - cron: "30 6 * * 1-5"
+    - cron: "30 7 * * 1-5"
     - cron: "30 8 * * 1-5"
-    # Mon–Fri: 6:00 PM IST
+    - cron: "30 9 * * 1-5"
+    - cron: "30 10 * * 1-5"
+    - cron: "30 11 * * 1-5"
     - cron: "30 12 * * 1-5"
-    # Sat–Sun: 10:00 AM IST
-    - cron: "30 4 * * 6,0"
+    - cron: "30 13 * * 1-5"
+
+    # Sat–Sun once at 10:00 IST → 4:30 UTC
+    - cron: "30 4 * * 6"
+    - cron: "30 4 * * 0"
+
   workflow_dispatch:
 
 jobs:
