@@ -4,8 +4,5 @@ export const gmpPages = {
   smeGMP: "https://www.investorgain.com/report/live-ipo-gmp/331/sme/",
   currentGMP: "https://www.investorgain.com/report/live-ipo-gmp/331/current/",
   allPerf: "https://www.investorgain.com/report/ipo-gmp-performance/377/",
-  mainlinePerf:
-    "https://www.investorgain.com/report/ipo-gmp-performance-tracker/377/ipo/",
-  smePerf:
-    "https://www.investorgain.com/report/ipo-gmp-performance-tracker/377/sme/",
+  allSub: "https://www.investorgain.com/report/ipo-subscription-live/333/all/",
 };
